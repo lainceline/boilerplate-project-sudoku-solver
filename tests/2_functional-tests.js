@@ -23,7 +23,7 @@ suite('Functional Tests', () => {
       .send({})
       .end((err, res) => {
         assert.equal(res.status, 400); // Changed to 400
-        assert.equal(res.body.error, 'Required field(s) missing');
+        assert.equal(res.body.error, 'Required field missing');
         done();
       });
   });
@@ -116,7 +116,7 @@ suite('Functional Tests', () => {
       .send({ puzzle: puzzlesAndSolutions[0][0] })
       .end((err, res) => {
         assert.equal(res.status, 400); // Changed to 400
-        assert.equal(res.body.error, 'Required field(s) missing');
+        assert.equal(res.body.error, 'Required field missing');
         done();
       });
   });

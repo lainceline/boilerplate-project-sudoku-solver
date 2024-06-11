@@ -6,7 +6,7 @@ const solver = new SudokuSolver();
 router.post('/solve', (req, res) => {
   const { puzzle } = req.body;
   if (!puzzle) {
-    return res.status(400).json({ error: 'Required field(s) missing' });
+    return res.status(400).json({ error: 'Required field missing' });
   }
   const solution = solver.solve(puzzle);
   if (solution === 'Puzzle cannot be solved' || solution === 'Invalid characters in puzzle' || solution === 'Expected puzzle to be 81 characters long') {
@@ -18,7 +18,7 @@ router.post('/solve', (req, res) => {
 router.post('/check', (req, res) => {
   const { puzzle, coordinate, value } = req.body;
   if (!puzzle || !coordinate || !value) {
-    return res.status(400).json({ error: 'Required field(s) missing' });
+    return res.status(400).json({ error: 'Required field missing' });
   }
 
   const validation = solver.validate(puzzle);
