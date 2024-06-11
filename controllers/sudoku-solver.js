@@ -24,7 +24,7 @@ class SudokuSolver {
         }
       }
       return true;
-  }
+    }
 
   checkRegionPlacement(puzzleString, row, column, value) {
     const startRow = Math.floor(row / 3) * 3;

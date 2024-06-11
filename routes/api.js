@@ -18,7 +18,9 @@ router.post('/solve', (req, res) => {
 router.post('/check', (req, res) => {
   const { puzzle, coordinate, value } = req.body;
   if (!puzzle || !coordinate || !value) {
-    return res.status(400).json({ error: 'Required field missing' });
+    const missingFields = (!puzzle ? 1 : 0) + (!coordinate ? 1 : 0) + (!value ? 1 : 0);
+    const errorMessage = `Required ${missingFields > 1 ? 'field(s)' : 'field'} missing`;
+    return res.status(400).json({ error: errorMessage });
   }
 
   const validation = solver.validate(puzzle);
@@ -35,6 +37,11 @@ router.post('/check', (req, res) => {
 
   if (isNaN(value) || value < 1 || value > 9) {
     return res.status(400).json({ error: 'Invalid value' });
+  }
+
+  // Check if the value is already placed at the coordinate
+  if (puzzle[row * 9 + column] === value.toString()) {
+    return res.json({ valid: true });
   }
 
   const rowValid = solver.checkRowPlacement(puzzle, row, column, value);
