@@ -148,7 +148,7 @@ suite('Functional Tests', () => {
       .post('/api/check')
       .send({ puzzle: puzzlesAndSolutions[0][0], coordinate: 'Z2', value: 3 })
       .end((err, res) => {
-        assert.equal(res.status, 400); // Changed to 400
+        assert.equal(res.status, 400);
         assert.equal(res.body.error, 'Invalid coordinate');
         done();
       });

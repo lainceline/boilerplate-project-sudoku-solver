@@ -18,9 +18,7 @@ router.post('/solve', (req, res) => {
 router.post('/check', (req, res) => {
   const { puzzle, coordinate, value } = req.body;
   if (!puzzle || !coordinate || !value) {
-    const missingFields = (!puzzle ? 1 : 0) + (!coordinate ? 1 : 0) + (!value ? 1 : 0);
-    const errorMessage = `Required ${missingFields > 1 ? 'field(s)' : 'field'} missing`;
-    return res.status(400).json({ error: errorMessage });
+    return res.status(400).json({ error: 'Required field(s) missing' });
   }
 
   const validation = solver.validate(puzzle);
@@ -30,8 +28,8 @@ router.post('/check', (req, res) => {
 
   const row = coordinate[0].toUpperCase().charCodeAt(0) - 65;
   const column = parseInt(coordinate[1]) - 1;
-
-  if (row < 0 || row > 8 || column < 0 || column > 8) {
+  
+  if (coordinate.length !== 2 || row < 0 || row > 8 || column < 0 || column > 8) {
     return res.status(400).json({ error: 'Invalid coordinate' });
   }
 
@@ -50,14 +48,16 @@ router.post('/check', (req, res) => {
 
   if (rowValid && colValid && regionValid) {
     return res.json({ valid: true });
+  } else {
+    const conflict = [];
+      if (!rowValid) conflict.push('row');
+      if (!colValid) conflict.push('column');
+      if (!regionValid) conflict.push('region');
+      if (conflict.length > 0) res.json({ valid: false, conflict });
+      
+      return res.status(400).json({ error: 'Invalid coordinate'});
   }
 
-  const conflict = [];
-  if (!rowValid) conflict.push('row');
-  if (!colValid) conflict.push('column');
-  if (!regionValid) conflict.push('region');
-
-  res.json({ valid: false, conflict });
 });
 
 module.exports = router;
